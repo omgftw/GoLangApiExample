@@ -58,9 +58,9 @@ func getStocks(c *gin.Context) {
 	})
 
 	// Create response
-	days = days[:ndays]
+	days = days[:envVars.NDays]
 	resp := ApiResponse{
-		Symbol: symbol,
+		Symbol: envVars.Symbol,
 	}
 
 	var average float64
@@ -87,7 +87,7 @@ func GetData() StockApiResponse {
 	var err error
 
 	// If no APIKEY is passed in, load test data from a local file
-	if apiKey == "" {
+	if envVars.ApiKey == "" {
 		jsonData, err := ioutil.ReadFile("data.json")
 		handleError(err)
 		err = json.Unmarshal(jsonData, &data)
@@ -113,42 +113,34 @@ func GetData() StockApiResponse {
 }
 
 func GetEnvVars() {
-	apiKey = os.Getenv("APIKEY")
+	envVars.ApiKey = os.Getenv("APIKEY")
 
-	symbol = os.Getenv("SYMBOL")
-	if symbol == "" {
-		symbol = "MSFT"
+	envVars.Symbol = os.Getenv("SYMBOL")
+	if envVars.Symbol == "" {
+		envVars.Symbol = "MSFT"
 	}
 
-	baseUrl = os.Getenv("BASEURL")
-	if baseUrl == "" {
-		baseUrl = "https://www.alphavantage.co/query?apikey={{ .ApiKey }}&function=TIME_SERIES_DAILY_ADJUSTED&symbol={{ .Symbol }}"
+	envVars.BaseUrl = os.Getenv("BASEURL")
+	if envVars.BaseUrl == "" {
+		envVars.BaseUrl = "https://www.alphavantage.co/query?apikey={{ .ApiKey }}&function=TIME_SERIES_DAILY_ADJUSTED&symbol={{ .Symbol }}"
 	}
 
 	ndaysString := os.Getenv("NDAYS")
 	if ndaysString == "" {
-		ndays = 3
+		envVars.NDays = 3
 	} else {
 		var err error
-		ndays, err = strconv.Atoi(ndaysString)
+		envVars.NDays, err = strconv.Atoi(ndaysString)
 		handleError(err)
 	}
 }
 
-type BaseUrlTemplate struct {
-	ApiKey string
-	Symbol string
-}
-
+// GetBaseUrl Templates the base URL for the API
 func GetBaseUrl() string {
-	tmpl := BaseUrlTemplate{
-		ApiKey: apiKey,
-		Symbol: symbol,
-	}
-	t, err :=template.New("baseUrl").Parse(baseUrl)
+	t, err :=template.New("baseUrl").Parse(envVars.BaseUrl)
 	handleError(err)
 	var output bytes.Buffer
-	err = t.Execute(&output, tmpl)
+	err = t.Execute(&output, envVars)
 	handleError(err)
 	return output.String()
 }
@@ -156,11 +148,14 @@ func GetBaseUrl() string {
 // Store data here for caching purposes
 var apiData StockApiResponse
 
-// env vars
-var apiKey string
-var symbol string
-var ndays int
-var baseUrl string
+type EnvVars struct {
+	ApiKey string
+	Symbol string
+	NDays int
+	BaseUrl string
+}
+
+var envVars = EnvVars{}
 
 func main() {
 	GetEnvVars()
