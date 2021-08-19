@@ -94,7 +94,8 @@ func GetData() StockApiResponse {
 		handleError(err)
 	} else {
 		// if APIKEY is passed, fetch the data from the API
-		resp, err := http.Get(GetBaseUrl())
+		client := http.Client{Timeout: 10 * time.Second}
+		resp, err := client.Get(GetBaseUrl())
 		handleError(err)
 		defer resp.Body.Close()
 		err = json.NewDecoder(resp.Body).Decode(&data)
@@ -164,6 +165,6 @@ func main() {
 	router := gin.Default()
 	router.GET("/", getStocks)
 
-	err := router.Run("127.0.0.1:8080")
+	err := router.Run("0.0.0.0:8080")
 	handleError(err)
 }

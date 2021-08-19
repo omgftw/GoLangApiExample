@@ -8,4 +8,12 @@ RUN go mod download
 COPY main.go ./
 RUN go get -d -v
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app . \
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
+
+
+FROM alpine:latest
+# RUN apk --no-cache add ca-certificates
+WORKDIR /
+COPY --from=0 /go/src/app/app /
+# COPY data.json /
+ENTRYPOINT ["/app"]
