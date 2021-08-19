@@ -12,6 +12,8 @@ Configuration is done via environment variables:
 ## Usage
 
 ```shell
+cd ~/go/src/
+git clone https://github.com/omgftw/GoLangApiExample.git
 go get
 go run main.go
 ```
@@ -38,3 +40,8 @@ Open http://127.0.0.1:8080 in your browser
 kubectl create secret generic stock-api-secret --from-literal=APIKEY='YOUR_KEY_HERE' 
 kubectl apply -f kubernetes/
 ```
+
+It can be accessed using your kubernetes url at the path /stock-api
+
+Example:
+http://192.168.64.3/stock-api
