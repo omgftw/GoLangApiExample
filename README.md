@@ -28,16 +28,22 @@ docker build -t stock-api .
 
 ### Run locally
 
-Docker Hub image:
+Set an API key
 
 ```shell
-docker run --rm -p 8080:8080 omgftw/stock-api
+APIKEY=YOUR_KEY_HERE
 ```
 
-Local image:
+Run Docker Hub image:
 
 ```shell
-docker run --rm -p 8080:8080 stock-api 
+docker run --rm -e APIKEY="$APIKEY" -p 8080:8080 omgftw/stock-api
+```
+
+Run local image:
+
+```shell
+docker run --rm -e APIKEY="$APIKEY" -p 8080:8080 stock-api 
 ```
 
 Open http://127.0.0.1:8080 in your browser
