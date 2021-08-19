@@ -19,3 +19,13 @@ spec:
           image: omgftw/stock-api:latest
           ports:
             - containerPort: 8080
+          env:
+            - name: SYMBOL
+              value: "MSFT"
+            - name: NDAYS
+              value: "7"
+            - name: APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: stock-api-secret
+                  key: APIKEY
