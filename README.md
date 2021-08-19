@@ -28,6 +28,14 @@ docker build -t stock-api .
 
 ### Run locally
 
+Docker Hub image:
+
+```shell
+docker run --rm -p 8080:8080 omgftw/stock-api
+```
+
+Local image:
+
 ```shell
 docker run --rm -p 8080:8080 stock-api 
 ```

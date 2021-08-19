@@ -2,8 +2,7 @@ FROM golang:1.17-alpine
 WORKDIR /go/src/app/
 
 # Get required go module dependencies before adding the binary to prevent unnecessary layer re-creation
-COPY go.mod ./
-COPY go.sum ./
+COPY go.mod go.sum ./
 RUN go mod download
 
 COPY main.go ./
