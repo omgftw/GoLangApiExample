@@ -3,6 +3,8 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"net/http"
@@ -88,7 +90,11 @@ func GetData() StockApiResponse {
 
 	// If no APIKEY is passed in, load test data from a local file
 	if envVars.ApiKey == "" {
-		jsonData, err := ioutil.ReadFile("data.json")
+		fileName := "data.json"
+		if _, err := os.Stat(fileName); os.IsNotExist(err) {
+			handleError(errors.New(fmt.Sprintf("No API key was specified and the default test data file (%s) could not be found", fileName)))
+		}
+		jsonData, err := ioutil.ReadFile(fileName)
 		handleError(err)
 		err = json.Unmarshal(jsonData, &data)
 		handleError(err)
