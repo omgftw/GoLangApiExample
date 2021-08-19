@@ -21,9 +21,15 @@ spec:
             - containerPort: 8080
           env:
             - name: SYMBOL
-              value: "MSFT"
+              valueFrom:
+                configMapKeyRef:
+                  name: stock-api-configmap
+                  key: SYMBOL
             - name: NDAYS
-              value: "7"
+              valueFrom:
+                configMapKeyRef:
+                  name: stock-api-configmap
+                  key: NDAYS
             - name: APIKEY
               valueFrom:
                 secretKeyRef:
