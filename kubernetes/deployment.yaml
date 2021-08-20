@@ -19,3 +19,19 @@ spec:
           image: omgftw/stock-api:latest
           ports:
             - containerPort: 8080
+          env:
+            - name: SYMBOL
+              valueFrom:
+                configMapKeyRef:
+                  name: stock-api-configmap
+                  key: SYMBOL
+            - name: NDAYS
+              valueFrom:
+                configMapKeyRef:
+                  name: stock-api-configmap
+                  key: NDAYS
+            - name: APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: stock-api-secret
+                  key: APIKEY
