@@ -21,9 +21,9 @@ type StockApiResponse struct {
 }
 
 type ApiResponse struct {
-	Symbol string `json:"symbol"`
-	Data []float64 `json:"data"`
-	Average float64 `json:"average"`
+	Symbol  string    `json:"symbol"`
+	Data    []float64 `json:"data"`
+	Average float64   `json:"average"`
 }
 
 type MetaData struct {
@@ -43,7 +43,7 @@ type TimeSeries struct {
 	Volume           int     `json:"6. volume,string"`
 	DividendAmount   float64 `json:"7. dividend amount,string"`
 	SplitCoefficient float64 `json:"8. split coefficient,string"`
-	Date time.Time
+	Date             time.Time
 }
 
 func getStocks(c *gin.Context) {
@@ -144,7 +144,7 @@ func GetEnvVars() {
 
 // GetBaseUrl Templates the base URL for the API
 func GetBaseUrl() string {
-	t, err :=template.New("baseUrl").Parse(envVars.BaseUrl)
+	t, err := template.New("baseUrl").Parse(envVars.BaseUrl)
 	handleError(err)
 	var output bytes.Buffer
 	err = t.Execute(&output, envVars)
@@ -156,9 +156,9 @@ func GetBaseUrl() string {
 var apiData StockApiResponse
 
 type EnvVars struct {
-	ApiKey string
-	Symbol string
-	NDays int
+	ApiKey  string
+	Symbol  string
+	NDays   int
 	BaseUrl string
 }
 
